@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: shopping_app_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shopping_app
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: shopping_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+volumes:
+  pgdata:
