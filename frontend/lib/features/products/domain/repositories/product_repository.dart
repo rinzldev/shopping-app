@@ -4,14 +4,19 @@ import '../entities/product.dart';
 ///
 /// Es una clase ABSTRACTA: define QUÉ operaciones existen, pero no CÓMO
 /// se hacen. La implementación real vive en la capa `data`.
-///
-/// ¿Por qué una interfaz? Para invertir la dependencia: la capa de
-/// presentación depende de esta abstracción, no de Dio ni de la API.
-/// Mañana podés cambiar la implementación (API, cache, mock para tests)
-/// sin tocar el resto de la app.
 abstract interface class ProductRepository {
   /// Trae todos los productos del usuario.
-  ///
-  /// Devuelve un `Future` porque es una operación asíncrona (va a la red).
   Future<List<Product>> getProducts();
+
+  /// Crea un producto nuevo y devuelve el producto creado (ya con su `id`
+  /// y timestamps asignados por el backend).
+  ///
+  /// Recibe solo los campos que el cliente puede definir: el `id`, `user_id`,
+  /// `created_at` y `updated_at` los pone el servidor, nunca el cliente.
+  Future<Product> createProduct({
+    required String name,
+    required UnitOfMeasure unitOfMeasure,
+    String? brand,
+    int? categoryId,
+  });
 }

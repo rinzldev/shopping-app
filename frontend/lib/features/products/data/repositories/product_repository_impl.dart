@@ -16,4 +16,19 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<List<Product>> getProducts() {
     return _remoteDataSource.getProducts();
   }
+
+  @override
+  Future<Product> createProduct({
+    required String name,
+    required UnitOfMeasure unitOfMeasure,
+    String? brand,
+    int? categoryId,
+  }) {
+    return _remoteDataSource.createProduct(
+      name: name,
+      unitOfMeasure: unitOfMeasure,
+      brand: brand,
+      categoryId: categoryId,
+    );
+  }
 }
