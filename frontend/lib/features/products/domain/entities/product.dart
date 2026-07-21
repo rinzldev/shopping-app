@@ -3,14 +3,7 @@
 /// Es un conjunto CERRADO de valores (igual que en el backend), así que
 /// lo modelamos como enum en vez de String: el compilador te obliga a
 /// manejar solo valores válidos y evita typos.
-enum UnitOfMeasure {
-  unit,
-  kg,
-  g,
-  l,
-  ml,
-  pack,
-}
+enum UnitOfMeasure { unit, kg, g, l, ml, pack }
 
 /// Entidad de dominio: representa un Producto en el corazón de la app.
 ///

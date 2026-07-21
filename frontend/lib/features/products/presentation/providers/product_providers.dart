@@ -7,7 +7,9 @@ import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 
 /// Eslabón 1: provee el DataSource, inyectándole el Dio del dioProvider.
-final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((ref) {
+final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((
+  ref,
+) {
   final dio = ref.watch(dioProvider);
   return ProductRemoteDataSourceImpl(dio);
 });

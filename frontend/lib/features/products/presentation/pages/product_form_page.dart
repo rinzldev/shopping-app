@@ -45,7 +45,9 @@ class _ProductFormPageState extends ConsumerState<ProductFormPage> {
 
     try {
       // 2. Llama al repositorio (vía ref.read, porque es una acción puntual).
-      await ref.read(productRepositoryProvider).createProduct(
+      await ref
+          .read(productRepositoryProvider)
+          .createProduct(
             name: _nameController.text.trim(),
             unitOfMeasure: _unit,
             brand: _brandController.text.trim().isEmpty
@@ -62,9 +64,9 @@ class _ProductFormPageState extends ConsumerState<ProductFormPage> {
       // Si el POST falla, mostramos un aviso y reactivamos el botón.
       if (mounted) {
         setState(() => _isSubmitting = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al crear: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error al crear: $e')));
       }
     }
   }
@@ -77,48 +79,54 @@ class _ProductFormPageState extends ConsumerState<ProductFormPage> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Nombre *'),
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'El nombre es obligatorio';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _brandController,
-                decoration: const InputDecoration(labelText: 'Marca (opcional)'),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<UnitOfMeasure>(
-                initialValue: _unit,
-                decoration: const InputDecoration(labelText: 'Unidad'),
-                items: UnitOfMeasure.values
-                    .map((u) => DropdownMenuItem(value: u, child: Text(u.name)))
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) setState(() => _unit = value);
-                },
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: _isSubmitting ? null : _submit,
-                child: _isSubmitting
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Nombre *'),
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'El nombre es obligatorio';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _brandController,
+                  decoration: const InputDecoration(
+                    labelText: 'Marca (opcional)',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<UnitOfMeasure>(
+                  initialValue: _unit,
+                  decoration: const InputDecoration(labelText: 'Unidad'),
+                  items: UnitOfMeasure.values
+                      .map(
+                        (u) => DropdownMenuItem(value: u, child: Text(u.name)),
                       )
-                    : const Text('Guardar'),
-              ),
-            ],
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) setState(() => _unit = value);
+                  },
+                ),
+                const SizedBox(height: 24),
+                FilledButton(
+                  onPressed: _isSubmitting ? null : _submit,
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Guardar'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
