@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/product.dart';
 import '../providers/product_providers.dart';
 
 /// Pantalla que muestra la lista de productos.
-///
-/// Extiende `ConsumerWidget` (de Riverpod) en vez de `StatelessWidget`:
-/// eso le da el `ref` para observar providers dentro de `build`.
 class ProductsPage extends ConsumerWidget {
   const ProductsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Observamos el provider. Cuando el Future resuelve (o falla), Riverpod
-    // vuelve a llamar build() solo. `productsAsync` es un AsyncValue.
     final productsAsync = ref.watch(productsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Productos')),
-      // `.when` nos obliga a manejar los 3 estados. Nada de flags manuales.
+      // Botón flotante para ir al formulario de creación.
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/new'),
+        child: const Icon(Icons.add),
+      ),
       body: productsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(

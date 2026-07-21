@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/products/presentation/pages/products_page.dart';
+import 'core/router/app_router.dart';
 
 void main() {
-  // ProviderScope es la raíz de Riverpod: guarda el estado de TODOS los
-  // providers. Toda la app debe vivir dentro de él.
   runApp(const ProviderScope(child: ShoppingApp()));
 }
 
-class ShoppingApp extends StatelessWidget {
+/// Ahora es `ConsumerWidget` (antes `StatelessWidget`): necesita `ref` para
+/// leer el `routerProvider`.
+class ShoppingApp extends ConsumerWidget {
   const ShoppingApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
+    // MaterialApp.router (en vez de MaterialApp con `home:`) delega toda la
+    // navegación a GoRouter.
+    return MaterialApp.router(
       title: 'Shopping App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const ProductsPage(),
+      routerConfig: router,
     );
   }
 }
